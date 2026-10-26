@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fournisseurs</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<main>
+    <h1>Fournisseurs</h1>
+    <table>
+        <thead><tr><th>#</th><th>Nom</th><th>Contact</th><th>Adresse</th><th>Produits fournis</th></tr></thead>
+        <tbody>
+        <tr th:each="f : ${fournisseurs}">
+            <td th:text="${f.id}"></td>
+            <td><strong th:text="${f.nom}"></strong></td>
+            <td th:text="${f.contact}"></td>
+            <td th:text="${f.adresse}"></td>
+            <td>
+                <a class="badge" th:each="p : ${f.produits}" th:href="@{/produits/{id}(id=${p.id})}" th:text="${p.nom}"></a>
+                <span class="muted" th:if="${#lists.isEmpty(f.produits)}">Aucun</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

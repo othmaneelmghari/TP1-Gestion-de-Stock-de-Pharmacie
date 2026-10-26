@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${produit.nom}">Produit</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<main>
+    <p><a th:href="@{/produits}">&larr; Retour à la liste</a></p>
+    <h1 th:text="${produit.nom}"></h1>
+
+    <div class="card">
+        <h2>Informations générales</h2>
+        <dl>
+            <dt>Description</dt><dd th:text="${produit.description}"></dd>
+            <dt>Prix</dt><dd th:text="${produit.prix != null} ? ${#numbers.formatDecimal(produit.prix, 1, 2)} : '-'"></dd>
+            <dt>Code barre</dt><dd th:text="${produit.codeBarre}"></dd>
+            <dt>Date d'expiration</dt>
+            <dd>
+                <span th:text="${produit.dateExpiration != null} ? ${#temporals.format(produit.dateExpiration, 'dd/MM/yyyy')} : '-'"></span>
+                <span class="badge danger" th:if="${produit.dateExpiration != null and produit.dateExpiration.isBefore(today)}">Expiré</span>
+            </dd>
+            <dt>Catégorie</dt><dd th:text="${produit.categorie != null} ? ${produit.categorie.nom} : '-'"></dd>
+            <dt>Fournisseur</dt>
+            <dd th:if="${produit.fournisseur != null}"
+                th:text="${produit.fournisseur.nom + ' — ' + produit.fournisseur.adresse}"></dd>
+            <dd th:unless="${produit.fournisseur != null}">-</dd>
+            <dt>Tags</dt>
+            <dd>
+                <span class="badge" th:each="t : ${produit.tags}" th:text="${t.libelle}"></span>
+                <span class="muted" th:if="${#sets.isEmpty(produit.tags)}">Aucun tag</span>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="card" th:if="${produit.detailProduit != null}">
+        <h2>Détails du produit</h2>
+        <dl>
+            <dt>Fabricant</dt><dd th:text="${produit.detailProduit.fabricant}"></dd>
+            <dt>Pays d'origine</dt><dd th:text="${produit.detailProduit.paysOrigine}"></dd>
+            <dt>Composition</dt><dd th:text="${produit.detailProduit.composition}"></dd>
+            <dt>Dosage</dt><dd th:text="${produit.detailProduit.dosage}"></dd>
+            <dt>Indications</dt><dd th:text="${produit.detailProduit.indications}"></dd>
+        </dl>
+    </div>
+</main>
+</body>
+</html>

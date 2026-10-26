@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tags</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<main>
+    <h1>Tags</h1>
+    <table>
+        <thead><tr><th>#</th><th>Libellé</th><th>Produits associés</th></tr></thead>
+        <tbody>
+        <tr th:each="t : ${tags}">
+            <td th:text="${t.id}"></td>
+            <td><strong th:text="${t.libelle}"></strong></td>
+            <td>
+                <a class="badge" th:each="p : ${t.produits}" th:href="@{/produits/{id}(id=${p.id})}" th:text="${p.nom}"></a>
+                <span class="muted" th:if="${#sets.isEmpty(t.produits)}">Aucun</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

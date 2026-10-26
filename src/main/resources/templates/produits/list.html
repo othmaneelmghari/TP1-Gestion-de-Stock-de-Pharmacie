@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Produits</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<main>
+    <h1>Produits <span class="muted" th:text="'(' + ${#lists.size(produits)} + ')'"></span></h1>
+    <table>
+        <thead>
+        <tr>
+            <th>#</th><th>Nom</th><th>Catégorie</th><th>Fournisseur</th>
+            <th>Prix</th><th>Expiration</th><th>Tags</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${produits}">
+            <td th:text="${p.id}"></td>
+            <td><strong th:text="${p.nom}"></strong><br><span class="muted" th:text="${p.codeBarre}"></span></td>
+            <td th:text="${p.categorie != null} ? ${p.categorie.nom} : '-'"></td>
+            <td th:text="${p.fournisseur != null} ? ${p.fournisseur.nom} : '-'"></td>
+            <td th:text="${p.prix != null} ? ${#numbers.formatDecimal(p.prix, 1, 2)} : '-'"></td>
+            <td>
+                <span th:text="${p.dateExpiration != null} ? ${#temporals.format(p.dateExpiration, 'dd/MM/yyyy')} : '-'"></span>
+                <span class="badge danger" th:if="${p.dateExpiration != null and p.dateExpiration.isBefore(today)}">Expiré</span>
+            </td>
+            <td><span class="badge" th:each="t : ${p.tags}" th:text="${t.libelle}"></span></td>
+            <td><a th:href="@{/produits/{id}(id=${p.id})}">Détails</a></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
